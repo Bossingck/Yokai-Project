@@ -82,6 +82,7 @@ main{max-width:1500px;width:100%;margin:0 auto;padding:16px 14px 70px;flex:1}
 .bar{display:flex;flex-wrap:wrap;gap:9px;align-items:flex-end;margin-bottom:14px}
 .bar .field{margin:0}
 .spacer{flex:1 1 auto}
+.searchbox{min-width:210px;flex:0 1 260px}
 .card{background:var(--sumi);border:1px solid #241a1e;padding:15px;margin-bottom:15px;border-radius:8px}
 .card h3{margin:0 0 12px;font-size:15px;color:var(--gold-hi);letter-spacing:.05em;font-weight:600}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:11px}
@@ -192,15 +193,215 @@ table.list tbody tr:hover{background:#181013}
 .meter i{display:block;height:100%;background:linear-gradient(90deg,var(--blood),var(--ember))}
 .medal{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#2a1113;color:#ffb2ab;font-size:12px}
 
+
+/* ---------- nicer scrolling ---------- */
+.scrollbox{position:relative}
+.gridwrap,.tablewrap,#pop{scroll-behavior:smooth;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#6d5729 #120c0f}
+.gridwrap::-webkit-scrollbar,.tablewrap::-webkit-scrollbar{width:11px;height:11px}
+.gridwrap::-webkit-scrollbar-track,.tablewrap::-webkit-scrollbar-track{background:#120c0f;border-left:1px solid #241a1e}
+.gridwrap::-webkit-scrollbar-thumb,.tablewrap::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#8a6d31,#4a3a1c);border-radius:8px;border:2px solid #120c0f}
+.gridwrap::-webkit-scrollbar-thumb:hover,.tablewrap::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--gold-hi),var(--gold))}
+.gridwrap::-webkit-scrollbar-corner,.tablewrap::-webkit-scrollbar-corner{background:#120c0f}
+.gridwrap.sy thead th{box-shadow:0 8px 14px -8px rgba(0,0,0,.9)}
+.gridwrap.sx th.nm,.gridwrap.sx td.nm{box-shadow:9px 0 14px -9px rgba(0,0,0,.9)}
+.sbtn{position:absolute;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid var(--gold);
+  background:rgba(27,19,23,.95);color:var(--gold-hi);cursor:pointer;display:none;z-index:12;font-size:14px;line-height:1;
+  box-shadow:0 8px 20px rgba(0,0,0,.65);transition:background .12s,transform .12s}
+.sbtn:hover{background:#2c1d22;transform:translateY(-1px)}
+.sbtn.down{bottom:76px}.sbtn.up{bottom:124px}
+.scrollbox.has-more .sbtn.down,.scrollbox.has-top .sbtn.up{display:block}
+.scrollbox.has-more::after{content:"";position:absolute;left:1px;right:12px;bottom:61px;height:38px;z-index:9;pointer-events:none;
+  background:linear-gradient(to top,rgba(20,13,17,.92),rgba(20,13,17,0))}
+.scrollcount{margin:8px 2px 0;font-size:12px;color:var(--ash);text-align:right}
+.tablewrap.tall{max-height:70vh;overflow:auto}
+.tablewrap.tall table.list th{position:sticky;top:0;z-index:3;box-shadow:0 1px 0 var(--gold-dim)}
+@media (max-width:640px){.gridwrap{max-height:68dvh}.sbtn{right:12px}}
+
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140%);background:#1d1418;border:1px solid var(--gold);
   color:var(--bone);padding:10px 18px;z-index:100;max-width:90vw;text-align:center;transition:transform .22s;border-radius:8px}
 #toast.show{transform:translateX(-50%) translateY(0)}
 #toast.bad{border-color:var(--ember);color:#ffb2ab}
 @media (max-width:640px){.brand b{font-size:15px}.whoami b{max-width:26vw}th.nm,td.nm{min-width:132px;max-width:132px}td.nm b{max-width:80px}.avatar{width:26px;height:26px;font-size:12px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* =====================================================================
+   FX — aura, sakura, motion (all pages)
+   ===================================================================== */
+#fx{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:radial-gradient(1100px 700px at 50% -15%,#220b0f 0,transparent 65%),var(--ink)}
+.aura{position:absolute;border-radius:50%;will-change:transform,opacity;filter:blur(64px)}
+.aura.a1{width:62vmax;height:62vmax;left:-18vmax;top:-22vmax;background:radial-gradient(circle,rgba(180,20,28,.55),rgba(180,20,28,0) 68%);animation:drift1 24s ease-in-out infinite alternate}
+.aura.a2{width:52vmax;height:52vmax;right:-16vmax;bottom:-20vmax;background:radial-gradient(circle,rgba(201,162,75,.30),rgba(201,162,75,0) 68%);animation:drift2 28s ease-in-out infinite alternate}
+.aura.a3{width:44vmax;height:44vmax;left:30%;top:35%;background:radial-gradient(circle,rgba(110,18,58,.40),rgba(110,18,58,0) 70%);animation:drift3 34s ease-in-out infinite alternate}
+.sun{position:absolute;width:min(38vmax,520px);aspect-ratio:1;right:6vw;top:7vh;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,rgba(232,66,60,.30),rgba(180,20,28,.14) 55%,rgba(180,20,28,0) 72%);animation:sunPulse 9s ease-in-out infinite}
+@keyframes drift1{to{transform:translate3d(16vmax,10vmax,0) scale(1.15)}}
+@keyframes drift2{to{transform:translate3d(-14vmax,-12vmax,0) scale(1.2)}}
+@keyframes drift3{0%{transform:translate3d(-6vmax,4vmax,0) scale(.9)}100%{transform:translate3d(12vmax,-8vmax,0) scale(1.25)}}
+@keyframes sunPulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.07);opacity:1}}
+#petals{position:absolute;inset:0;width:100%;height:100%}
+#cursorAura{position:absolute;left:0;top:0;width:560px;height:560px;margin:-280px 0 0 -280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,66,60,.20),rgba(201,162,75,.08) 42%,rgba(0,0,0,0) 70%);opacity:0;transition:opacity .5s;will-change:transform}
+#cursorAura.on{opacity:1}
+#login,#app{position:relative;z-index:1}
+#login{background:none}
+
+/* login */
+@keyframes riseIn{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{transform:scale(.92);opacity:.55}50%{transform:scale(1.08);opacity:1}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.login-wrap>*{animation:riseIn .85s cubic-bezier(.2,.7,.2,1) both}
+.login-wrap>.logo-plate{animation-delay:.05s}
+.login-wrap>.login-card{animation-delay:.28s}
+.logo-plate{position:relative;isolation:isolate;background:radial-gradient(closest-side,rgba(20,12,15,.7),rgba(20,12,15,0) 100%)}
+.logo-plate::before{content:"";position:absolute;inset:-12%;z-index:-1;border-radius:50%;filter:blur(36px);opacity:.6;
+  background:conic-gradient(from 0deg,rgba(180,20,28,.8),rgba(201,162,75,.65),rgba(120,20,60,.6),rgba(232,66,60,.8),rgba(201,162,75,.65),rgba(180,20,28,.8));
+  animation:spin 16s linear infinite}
+.logo-plate::after{content:"";position:absolute;inset:8%;z-index:-1;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,66,60,.38),rgba(232,66,60,0) 66%);animation:breathe 4.6s ease-in-out infinite}
+.logo-plate img{animation:floaty 7s ease-in-out infinite}
+@keyframes cardGlow{0%,100%{box-shadow:0 0 0 rgba(201,162,75,0),0 20px 60px rgba(0,0,0,.5)}50%{box-shadow:0 0 38px rgba(201,162,75,.20),0 20px 60px rgba(0,0,0,.5)}}
+.login-card{animation:riseIn .85s cubic-bezier(.2,.7,.2,1) .28s both,cardGlow 6s ease-in-out 1.2s infinite}
+.login-card .field{animation:riseIn .7s cubic-bezier(.2,.7,.2,1) both}
+.login-card .field:nth-of-type(1){animation-delay:.55s}.login-card .field:nth-of-type(2){animation-delay:.68s}
+#btnLogin{animation:riseIn .7s cubic-bezier(.2,.7,.2,1) .82s both}
+
+/* brand + header */
+@keyframes textShine{to{background-position:-220% 0}}
+.brand b{background:linear-gradient(100deg,#c9a24b 20%,#fff3c9 45%,#c9a24b 70%);background-size:220% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:textShine 6s linear infinite}
+.login-card h1{background:linear-gradient(100deg,#c9a24b 20%,#fff3c9 45%,#c9a24b 70%);background-size:220% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:textShine 7s linear infinite}
+.mark{position:relative;isolation:isolate;background:radial-gradient(closest-side,#2b1c20 0%,#181114 70%,rgba(8,6,10,0) 100%)}
+.mark::before{content:"";position:absolute;inset:-8px;border-radius:50%;z-index:-1;background:radial-gradient(circle,rgba(232,66,60,.5),rgba(232,66,60,0) 70%);animation:breathe 4s ease-in-out infinite}
+header.top{box-shadow:0 10px 30px rgba(0,0,0,.45)}
+@keyframes appIn{from{opacity:0}to{opacity:1}}
+.appin{animation:appIn .8s ease both}
+
+/* buttons, inputs */
+.btn{transition:transform .14s,box-shadow .22s,background .14s,border-color .14s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(201,162,75,.16)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn.primary{position:relative;overflow:hidden}
+.btn.primary::after{content:"";position:absolute;top:0;left:-70%;width:40%;height:100%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);animation:shine 4.6s ease-in-out infinite}
+@keyframes shine{0%,62%{left:-70%}100%{left:140%}}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px rgba(201,162,75,.16)}
+
+/* tabs indicator */
+.tabs-in{position:relative}
+.tab{border-bottom-color:transparent!important;transition:color .2s}
+.tab-ind{position:absolute;left:0;bottom:0;height:3px;width:0;border-radius:3px 3px 0 0;
+  background:linear-gradient(90deg,var(--blood),var(--gold-hi));box-shadow:0 0 14px 1px rgba(232,66,60,.7);
+  transition:transform .4s cubic-bezier(.3,.8,.2,1),width .4s cubic-bezier(.3,.8,.2,1)}
+
+/* panels / surfaces let the aura glow through */
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.panel.on{animation:panelIn .5s cubic-bezier(.2,.7,.2,1)}
+.card{background:rgba(19,13,17,.80)}
+.gridwrap,.tablewrap{background:rgba(19,13,17,.84)}
+nav.tabs{background:rgba(19,13,17,.92)}
+.chip{transition:transform .2s,border-color .2s}
+.chip:hover{transform:translateY(-2px);border-color:var(--gold-dim)}
+@keyframes chipIn{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.enter .chip{animation:chipIn .55s cubic-bezier(.2,.7,.2,1) both}
+.enter tbody tr{animation:rowIn .5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes emberGlow{0%,100%{text-shadow:0 0 0 rgba(232,66,60,0)}50%{text-shadow:0 0 12px rgba(232,66,60,.65)}}
+td.fn:not(.zero){animation:emberGlow 3.4s ease-in-out infinite}
+@keyframes cellPop{0%{transform:scale(.6);filter:brightness(2.2)}100%{transform:scale(1);filter:none}}
+.cell.pop{animation:cellPop .5s cubic-bezier(.2,1.4,.3,1)}
+.cell:not(.ro):hover{box-shadow:0 0 0 1px var(--gold-dim),0 0 14px rgba(201,162,75,.25)}
+#pop.on{animation:modalIn .22s cubic-bezier(.2,.9,.25,1.1)}
+
+/* photo check modal */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes modalIn{from{opacity:0;transform:translateY(26px) scale(.96)}to{opacity:1;transform:none}}
+.modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:16px;
+  background:rgba(5,3,6,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:auto}
+.modal.on{display:flex;animation:fadeIn .25s ease}
+.modal-card{width:min(1000px,100%);max-height:calc(100dvh - 32px);overflow:auto;position:relative;border-radius:14px;
+  background:linear-gradient(180deg,#1d1418,#120c0f);border:1px solid var(--gold-dim);
+  box-shadow:0 30px 90px rgba(0,0,0,.75),0 0 60px rgba(180,20,28,.2);animation:modalIn .45s cubic-bezier(.2,.9,.25,1.1)}
+.mhead{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid #2b2024;position:sticky;top:0;z-index:5;background:#181015}
+.mhead h2{margin:0;font-family:"Chakra Petch";font-size:18px;color:var(--gold-hi);letter-spacing:.04em;flex:1;font-weight:600}
+.mx{background:none;border:1px solid #3a2b30;color:var(--ash);width:34px;height:34px;border-radius:50%;cursor:pointer;transition:border-color .15s,color .15s}
+.mx:hover{border-color:var(--ember);color:#ffb2ab}
+.mbody{padding:18px 20px}
+.mfoot{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;align-items:center;padding:14px 20px;border-top:1px solid #2b2024;position:sticky;bottom:0;background:#181015;z-index:5}
+.mfoot .note{margin-right:auto;color:var(--ash);font-size:12.5px;max-width:420px}
+.drop{display:grid;place-items:center;text-align:center;padding:30px 16px;margin-top:14px;border:2px dashed var(--gold-dim);border-radius:12px;
+  background:rgba(201,162,75,.04);cursor:pointer;transition:border-color .2s,background .2s,transform .2s;color:var(--ash);font-size:13.5px}
+.drop:hover,.drop.over{border-color:var(--gold-hi);background:rgba(201,162,75,.09);transform:scale(1.01)}
+.drop b{display:block;color:var(--gold-hi);font-size:17px;margin-bottom:5px;font-family:"Chakra Petch";font-weight:600}
+.drop img{max-height:230px;max-width:100%;border-radius:8px;margin-top:12px;border:1px solid #3a2b30}
+.prog{height:10px;border-radius:6px;background:#1d1418;overflow:hidden;border:1px solid #2b2024;margin:18px 0 8px}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blood),var(--gold-hi),var(--blood));background-size:200% 100%;animation:barFlow 1.4s linear infinite;transition:width .3s}
+@keyframes barFlow{to{background-position:-200% 0}}
+.scanwrap{position:relative;margin:6px auto 0;max-width:280px}
+.scanwrap img{width:100%;border-radius:10px;border:1px solid var(--gold-dim);display:block;opacity:.85}
+.scanwrap::after{content:"";position:absolute;left:0;right:0;height:3px;top:0;background:linear-gradient(90deg,transparent,var(--gold-hi),transparent);
+  box-shadow:0 0 18px 4px rgba(239,212,138,.6);animation:scan 2.2s ease-in-out infinite alternate}
+@keyframes scan{to{top:calc(100% - 3px)}}
+.vgrid{display:grid;grid-template-columns:minmax(230px,330px) 1fr;gap:18px}
+@media (max-width:760px){.vgrid{grid-template-columns:1fr}}
+.vimg{position:sticky;top:76px;align-self:start}
+@media (max-width:760px){.vimg{position:static}}
+.vimg img{width:100%;border-radius:10px;border:1px solid var(--gold-dim);background:#0d090c;cursor:zoom-in;display:block}
+.vimg img.zoom{position:fixed;inset:4vh 4vw;width:auto;height:auto;max-width:92vw;max-height:92vh;margin:auto;z-index:120;cursor:zoom-out;box-shadow:0 0 0 100vmax rgba(0,0,0,.88)}
+.vimg small{display:block;margin-top:6px;color:var(--ash);font-size:12px}
+.vsum{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.vsum b{font-family:"Chakra Petch";color:var(--gold-hi);font-size:16px;margin-right:auto;font-weight:600}
+.mlist{display:flex;flex-direction:column;gap:6px}
+.mrow{display:grid;grid-template-columns:auto auto 1fr auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid #2b2024;border-radius:9px;
+  background:rgba(255,255,255,.02);cursor:pointer;transition:border-color .15s,background .15s;animation:rowIn .45s cubic-bezier(.2,.7,.2,1) both}
+.mrow:hover{border-color:var(--gold-dim)}
+.mrow.hit{border-color:#1f5a35;background:rgba(79,174,107,.08)}
+.mrow.warn{border-color:#6b4d14;background:rgba(217,154,43,.09)}
+.mrow input{width:18px;height:18px;accent-color:#c9a24b;margin:0}
+.mrow .nm2{min-width:0}
+.mrow .nm2 b{display:block;font-weight:500;font-size:14px}
+.mrow .nm2 small{color:var(--ash);font-size:11.5px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{font-size:11.5px;padding:2px 9px;border-radius:20px;border:1px solid;white-space:nowrap}
+.tag.ok{border-color:var(--ok);color:#9ae6b0;background:#122a1b}
+.tag.chk{border-color:var(--warn);color:#f3cd86;background:#2c2010}
+.tag.no{border-color:#3a2b30;color:var(--ash-dim)}
+.tag.has{border-color:var(--gold-dim);color:var(--gold-hi);background:#241a0e}
+.unm{margin-top:12px;padding:10px 12px;border:1px dashed #4a3a3e;border-radius:9px}
+.unm h4{margin:0 0 8px;font-size:12.5px;color:var(--ash);font-weight:600}
+.unm .ur{display:flex;gap:8px;align-items:center;margin-bottom:6px;font-size:13px}
+.unm .ur span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--bone)}
+.unm select{width:auto;max-width:180px;padding:5px 8px}
+.errbox{padding:14px;border:1px solid #5c1c1e;background:#1e1113;border-radius:9px;color:#ffb9b4;font-size:14px;margin-top:14px}
+body.noscroll{overflow:hidden}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.enter tbody tr:nth-child(1){animation-delay:0.08s}
+.enter tbody tr:nth-child(2){animation-delay:0.11s}
+.enter tbody tr:nth-child(3){animation-delay:0.15s}
+.enter tbody tr:nth-child(4){animation-delay:0.18s}
+.enter tbody tr:nth-child(5){animation-delay:0.22s}
+.enter tbody tr:nth-child(6){animation-delay:0.25s}
+.enter tbody tr:nth-child(7){animation-delay:0.29s}
+.enter tbody tr:nth-child(8){animation-delay:0.32s}
+.enter tbody tr:nth-child(9){animation-delay:0.36s}
+.enter tbody tr:nth-child(10){animation-delay:0.39s}
+.enter tbody tr:nth-child(11){animation-delay:0.42s}
+.enter tbody tr:nth-child(12){animation-delay:0.46s}
+.enter tbody tr:nth-child(13){animation-delay:0.50s}
+.enter tbody tr:nth-child(14){animation-delay:0.53s}
+.enter tbody tr:nth-child(15){animation-delay:0.57s}
+.enter .chip:nth-child(1){animation-delay:0.04s}
+.enter .chip:nth-child(2){animation-delay:0.08s}
+.enter .chip:nth-child(3){animation-delay:0.12s}
+.enter .chip:nth-child(4){animation-delay:0.16s}
+.enter .chip:nth-child(5){animation-delay:0.20s}
+.enter .chip:nth-child(6){animation-delay:0.24s}
+.enter .chip:nth-child(7){animation-delay:0.28s}
 </style>
 </head>
 <body>
+<div id="fx" aria-hidden="true"><i class="aura a1"></i><i class="aura a2"></i><i class="aura a3"></i><i class="sun"></i><canvas id="petals"></canvas><div id="cursorAura"></div></div>
 
 <section id="login">
   <div class="login-wrap">
@@ -240,6 +441,8 @@ table.list tbody tr:hover{background:#181013}
           <button class="on" data-v="week">รายสัปดาห์</button>
           <button data-v="range">สรุปช่วงวันที่</button>
         </div>
+        <div class="field searchbox"><label for="ckSearch">ค้นหาชื่อ</label>
+          <input type="text" id="ckSearch" placeholder="พิมพ์ชื่อสมาชิก…" autocomplete="off" spellcheck="false"></div>
         <div class="spacer"></div>
       </div>
 
@@ -252,11 +455,15 @@ table.list tbody tr:hover{background:#181013}
           <div class="field"><label for="ckRound">รอบ</label>
             <select id="ckRound"><option value="all">ทั้ง 2 รอบ</option><option value="20">20:00</option><option value="23">23:00</option></select></div>
           <div class="spacer"></div>
+          <button class="btn sm" id="btnPhoto">📷 อัปโหลดรูปเช็คชื่อ</button>
           <button class="btn sm" id="btnAuto">เติมจากรายการแจ้ง</button>
           <button class="btn sm danger" id="btnRest">ปิดยอดวันนี้ = ขาดไม่แจ้ง</button>
         </div>
         <div class="chips" id="ckChips"></div>
-        <div class="gridwrap" id="ckGrid"><div class="loading">กำลังโหลด…</div></div>
+        <div class="scrollbox"><div class="gridwrap" id="ckGrid"><div class="loading">กำลังโหลด…</div></div>
+        <button class="sbtn up" title="กลับไปบนสุด" aria-label="กลับไปบนสุด">▲</button>
+        <button class="sbtn down" title="เลื่อนลงดูรายชื่อต่อ" aria-label="เลื่อนลง">▼</button></div>
+        <div class="scrollcount" id="ckCount"></div>
         <div class="legend">
           <span><i class="c-ok"></i>มา</span><span><i class="c-warn"></i>เลท (แจ้ง)</span>
           <span><i class="c-gold"></i>ลา (แจ้ง)</span><span><i class="c-bad"></i>เลท ไม่แจ้ง</span>
@@ -273,7 +480,7 @@ table.list tbody tr:hover{background:#181013}
           <button class="btn sm" id="btnFnCsv">ดาวน์โหลด CSV</button>
         </div>
         <div class="chips" id="fnChips"></div>
-        <div class="tablewrap" id="fnTable"><div class="loading">กำลังคำนวณ…</div></div>
+        <div class="tablewrap tall" id="fnTable"><div class="loading">กำลังคำนวณ…</div></div>
       </div>
 
       <div class="card" style="margin-top:16px">
@@ -321,11 +528,16 @@ table.list tbody tr:hover{background:#181013}
         <div class="field"><label for="dvAnchor">สัปดาห์ของวันที่</label><input type="date" id="dvAnchor"></div>
         <button class="btn sm" id="dvNext">ถัดไป ▶</button>
         <button class="btn sm" id="dvNow">สัปดาห์นี้</button>
+        <div class="field searchbox"><label for="dvSearch">ค้นหาชื่อ</label>
+          <input type="text" id="dvSearch" placeholder="พิมพ์ชื่อสมาชิก…" autocomplete="off" spellcheck="false"></div>
         <div class="spacer"></div>
         <button class="btn sm" id="btnDvCsv">ดาวน์โหลด CSV</button>
       </div>
       <div class="chips" id="dvChips"></div>
-      <div class="gridwrap" id="dvGrid"><div class="loading">กำลังโหลด…</div></div>
+      <div class="scrollbox"><div class="gridwrap" id="dvGrid"><div class="loading">กำลังโหลด…</div></div>
+        <button class="sbtn up" title="กลับไปบนสุด" aria-label="กลับไปบนสุด">▲</button>
+        <button class="sbtn down" title="เลื่อนลงดูรายชื่อต่อ" aria-label="เลื่อนลง">▼</button></div>
+        <div class="scrollcount" id="dvCount"></div>
       <div class="legend"><span><i class="c-ok"></i>ส่งแล้ว</span><span><i class="c-bad"></i>ค้างส่ง</span><span>กดที่ช่องเพื่อลงของและจำนวน</span></div>
     </section>
 
@@ -337,7 +549,7 @@ table.list tbody tr:hover{background:#181013}
         <button class="btn sm" id="btnLgReload">ดูประวัติ</button>
       </div>
       <p class="sect-note">ทุกการกดเช็คชื่อ แจ้งลา และลงของ ถูกบันทึกไว้ที่นี่ แก้หรือลบไม่ได้</p>
-      <div class="tablewrap" id="lgTable"><div class="loading">กำลังโหลด…</div></div>
+      <div class="tablewrap tall" id="lgTable"><div class="loading">กำลังโหลด…</div></div>
     </section>
 
     <section class="panel" id="p-admin">
@@ -369,7 +581,7 @@ table.list tbody tr:hover{background:#181013}
   </main>
 </div>
 
-<div id="popmask"></div><div id="pop"></div><div id="toast"></div>
+<div id="popmask"></div><div id="pop"></div><div id="modal" class="modal" role="dialog" aria-modal="true"></div><div id="toast"></div>
 
 <script>
 const SB_URL="https://cywlvnwufnswfgabglqe.supabase.co";
@@ -401,6 +613,7 @@ function weekStart(d){var t=parseD(d);t.setDate(t.getDate()-((t.getDay()+6)%7));
 function weekOf(d){var s=weekStart(d),a=[];for(var i=0;i<7;i++)a.push(addDays(s,i));return a}
 const thDate=function(d){return d?d.slice(8,10)+"/"+d.slice(5,7)+"/"+d.slice(0,4):""};
 const monthStart=function(){return bkkToday().slice(0,8)+"01"};
+const nameMatch=function(name,q){q=(q||"").trim().toLowerCase();return !q||String(name).toLowerCase().indexOf(q)>=0};
 const initial=function(n){return esc(String(n||"?").trim().charAt(0).toUpperCase())};
 
 let tTimer;
@@ -467,17 +680,20 @@ function buildTabs(){
     b.className="tab"+(i?"":" on");b.textContent=t.label;b.dataset.id=t.id;
     b.onclick=function(){showTab(t.id)};w.appendChild(b);
   });
+  const ind=document.createElement("i");ind.className="tab-ind";w.appendChild(ind);
+  requestAnimationFrame(moveInd);
 }
 function showTab(id){
   document.querySelectorAll(".tab").forEach(function(b){b.classList.toggle("on",b.dataset.id===id)});
   document.querySelectorAll(".panel").forEach(function(p){p.classList.toggle("on",p.id==="p-"+id)});
+  requestAnimationFrame(moveInd);
   if(id==="leave")loadLeaves();
   if(id==="deliver")loadDeliveries();
   if(id==="log")loadLog();
   if(id==="admin")loadAdmin();
 }
 async function startApp(){
-  $("login").style.display="none";$("app").style.display="flex";
+  $("login").style.display="none";$("app").style.display="flex";$("app").classList.add("appin");
   $("whoName").textContent=me.display_name||me.username;
   $("whoRole").textContent=isAdmin()?"แอดมิน":"ลูกแก๊งค์";
   const today=bkkToday();
@@ -514,6 +730,31 @@ function closePop(){$("pop").classList.remove("on");$("popmask").classList.remov
 $("popmask").onclick=closePop;
 addEventListener("keydown",function(e){if(e.key==="Escape")closePop()});
 
+
+/* ---------- scroll helpers ---------- */
+function updScroll(el){
+  if(!el)return;
+  const box=el.parentElement,more=el.scrollHeight-el.clientHeight-el.scrollTop>10,top=el.scrollTop>24;
+  el.classList.toggle("sx",el.scrollLeft>2);
+  el.classList.toggle("sy",el.scrollTop>2);
+  if(box&&box.classList.contains("scrollbox")){box.classList.toggle("has-more",more);box.classList.toggle("has-top",top)}
+}
+function initScroll(el){
+  if(!el)return;
+  if(!el._sb){el._sb=1;el.addEventListener("scroll",function(){updScroll(el)},{passive:true})}
+  updScroll(el);
+}
+document.addEventListener("click",function(e){
+  const b=e.target.closest&&e.target.closest(".sbtn");if(!b)return;
+  const el=b.parentElement.querySelector(".gridwrap");if(!el)return;
+  if(b.classList.contains("up"))el.scrollTo({top:0,behavior:"smooth"});
+  else el.scrollBy({top:Math.round(el.clientHeight*0.75),behavior:"smooth"});
+});
+addEventListener("resize",function(){updScroll($("ckGrid"));updScroll($("dvGrid"))});
+function setCount(id,shown,total){
+  $(id).textContent=total?("แสดง "+shown+" จาก "+total+" คน"):"";
+}
+
 /* ---------- overview (attendance + fines in one table) ---------- */
 function setView(v){
   ckView=v;
@@ -531,7 +772,7 @@ async function loadCheck(){
       api("yokai_attendance?select=*&check_date=gte."+a+"&check_date=lte."+b),
       api("yokai_leaves?select=*&leave_date=gte."+a+"&leave_date=lte."+b)]);
     ckAtt=res[0];ckLeaves=res[1];
-    renderCheck();
+    renderCheck();animateIn($("p-check"));
   }catch(e){$("ckGrid").innerHTML='<div class="empty">โหลดไม่สำเร็จ: '+esc(e.message)+"</div>"}
 }
 const attAt=function(m,d,r){return ckAtt.find(function(x){return x.member_id===m&&x.check_date===d&&x.round===r})};
@@ -541,8 +782,10 @@ function shownRounds(){const v=$("ckRound").value;
   return v==="all"?ROUNDS:ROUNDS.filter(function(r){return r.k===v})}
 
 function renderCheck(){
-  const act=members.filter(function(m){return m.active}),rs=shownRounds(),today=bkkToday();
-  if(!act.length){$("ckGrid").innerHTML='<div class="empty">ยังไม่มีสมาชิก เพิ่มได้ที่แท็บจัดการ</div>';renderCkChips();return}
+  const allAct=members.filter(function(m){return m.active}),rs=shownRounds(),today=bkkToday();
+  const q=$("ckSearch").value,act=allAct.filter(function(m){return nameMatch(m.name,q)});
+  if(!allAct.length){$("ckGrid").innerHTML='<div class="empty">ยังไม่มีสมาชิก เพิ่มได้ที่แท็บจัดการ</div>';renderCkChips();return}
+  if(!act.length){$("ckGrid").innerHTML='<div class="empty">ไม่พบชื่อ "'+esc(q.trim())+'"</div>';setCount("ckCount",0,allAct.length);initScroll($("ckGrid"));renderCkChips();return}
   let h1='<tr><th class="nm" rowspan="2">สมาชิก</th>',h2="<tr>";
   ckDays.forEach(function(d){
     const t=d===today?" today":"";
@@ -575,11 +818,11 @@ function renderCheck(){
 
   let foot1='<tr><td class="nm">เช็คแล้ว</td>';
   ckDays.forEach(function(d){rs.forEach(function(r){
-    foot1+="<td>"+ckAtt.filter(function(x){return x.check_date===d&&x.round===r.k}).length+"/"+act.length+"</td>"})});
+    foot1+="<td>"+ckAtt.filter(function(x){return x.check_date===d&&x.round===r.k}).length+"/"+allAct.length+"</td>"})});
   foot1+='<td colspan="4"></td><td class="fn"></td></tr>';
   let foot2='<tr><td class="nm">ค่าปรับรวมของวัน</td>',grand=0;
   ckDays.forEach(function(d){
-    let s=0;act.forEach(function(m){
+    let s=0;allAct.forEach(function(m){
       s+=dayFine(ckAtt.filter(function(x){return x.member_id===m.id&&x.check_date===d}))});
     grand+=s;
     foot2+='<td colspan="'+rs.length+'" class="'+(s?"money":"")+'">'+(s?"$"+money(s):"—")+"</td>"});
@@ -587,8 +830,10 @@ function renderCheck(){
 
   $("ckGrid").innerHTML='<table class="grid"><thead>'+h1+h2+"</thead><tbody>"+body+"</tbody><tfoot>"+foot1+foot2+"</tfoot></table>";
   $("ckGrid").querySelectorAll(".cell:not(.ro)").forEach(function(b){b.onclick=function(){cellMenu(b)}});
+  setCount("ckCount",act.length,allAct.length);initScroll($("ckGrid"));
   renderCkChips();
   $("btnAuto").style.display=isAdmin()?"":"none";
+  $("btnPhoto").style.display=isAdmin()?"":"none";
   $("btnRest").style.display=isAdmin()?"":"none";
 }
 function renderCkChips(){
@@ -603,6 +848,7 @@ function renderCkChips(){
     '<div class="chip bad"><b>'+by("absent_unnotified")+"</b><span>ขาด (ไม่แจ้ง)</span></div>"+
     '<div class="chip"><b>'+Math.max(0,slots-rows.length)+"</b><span>ช่องที่ยังไม่เช็ค</span></div>"+
     '<div class="chip cash"><b>$'+money(fineOf(rows))+"</b><span>ค่าปรับสัปดาห์นี้</span></div>";
+  countUp($("ckChips"),"ck");
 }
 function cellMenu(btn){
   const m=btn.dataset.m,d=btn.dataset.d,r=btn.dataset.r;
@@ -623,7 +869,7 @@ async function setStatus(m,d,r,status){
     ckAtt=ckAtt.filter(function(x){return !(x.member_id===m&&x.check_date===d&&x.round===r)}).concat(rows);
     const mem=members.find(function(x){return x.id===m});
     logAct("เช็คชื่อ",mem?mem.name:m,thDate(d)+" "+r+":00 → "+STATUS[status].th);
-    renderCheck();toast((mem?mem.name:"")+" "+r+":00 → "+STATUS[status].th);
+    renderCheck();popCell(m,d,r);toast((mem?mem.name:"")+" "+r+":00 → "+STATUS[status].th);
   }catch(e){toast(e.message,true)}
 }
 async function clearStatus(a){
@@ -688,23 +934,31 @@ async function loadFines(){
       const o=map[k];return Object.assign({},o,{total:fineOf(o.rows)})})
       .sort(function(a,b){return b.total-a.total||a.name.localeCompare(b.name)});
     const grand=fnSummary.reduce(function(s,o){return s+o.total},0);
-    const max=fnSummary.reduce(function(s,o){return Math.max(s,o.total)},0);
     $("fnChips").innerHTML='<div class="chip cash"><b>$'+money(grand)+"</b><span>ค่าปรับรวม</span></div>"+
       '<div class="chip bad"><b>'+fnSummary.filter(function(o){return o.total>0}).length+"</b><span>คนที่ติดค่าปรับ</span></div>"+
       '<div class="chip"><b>'+rows.length+"</b><span>ช่องที่เช็ค</span></div>";
-    $("fnTable").innerHTML='<table class="list"><thead><tr><th>#</th><th>สมาชิก</th><th class="num">มา</th>'+
-      '<th class="num">เลท·แจ้ง</th><th class="num">ลา·แจ้ง</th><th class="num">เลท·ไม่แจ้ง</th>'+
-      '<th class="num">ขาด·ไม่แจ้ง</th><th class="num" style="min-width:150px">ค่าปรับ</th></tr></thead><tbody>'+
-      fnSummary.map(function(o,i){
-        const pct=max?Math.round(o.total/max*100):0;
-        return '<tr><td class="rank">'+(o.total?'<span class="medal">'+(i+1)+"</span>":(i+1))+"</td>"+
-        '<td><div class="who-cell"><span class="avatar '+o.rank+'">'+initial(o.name)+"</span><span>"+esc(o.name)+"</span></div></td>"+
-        '<td class="num">'+o.present+'</td><td class="num">'+o.late_notified+'</td><td class="num">'+o.leave_notified+
-        '</td><td class="num">'+o.late_unnotified+'</td><td class="num">'+o.absent_unnotified+
-        '</td><td class="num"><span class="money'+(o.total?"":" zero")+'">$'+money(o.total)+
-        '</span><div class="meter"><i style="width:'+pct+'%"></i></div></td></tr>'}).join("")+
-      "</tbody></table>";
+    countUp($("fnChips"),"fn");
+    renderFines();animateIn($("rangeBox"));
   }catch(e){$("fnTable").innerHTML='<div class="empty">คำนวณไม่สำเร็จ: '+esc(e.message)+"</div>"}
+}
+function renderFines(){
+  const q=$("ckSearch").value;
+  const max=fnSummary.reduce(function(s,o){return Math.max(s,o.total)},0);
+  // keep the original ranking number even when the list is filtered by name
+  const list=fnSummary.map(function(o,i){return {o:o,i:i}}).filter(function(x){return nameMatch(x.o.name,q)});
+  if(!list.length){$("fnTable").innerHTML='<div class="empty">ไม่พบชื่อ "'+esc(q.trim())+'"</div>';return}
+  $("fnTable").innerHTML='<table class="list"><thead><tr><th>#</th><th>สมาชิก</th><th class="num">มา</th>'+
+    '<th class="num">เลท·แจ้ง</th><th class="num">ลา·แจ้ง</th><th class="num">เลท·ไม่แจ้ง</th>'+
+    '<th class="num">ขาด·ไม่แจ้ง</th><th class="num" style="min-width:150px">ค่าปรับ</th></tr></thead><tbody>'+
+    list.map(function(x){
+      const o=x.o,i=x.i,pct=max?Math.round(o.total/max*100):0;
+      return '<tr><td class="rank">'+(o.total?'<span class="medal">'+(i+1)+"</span>":(i+1))+"</td>"+
+      '<td><div class="who-cell"><span class="avatar '+o.rank+'">'+initial(o.name)+"</span><span>"+esc(o.name)+"</span></div></td>"+
+      '<td class="num">'+o.present+'</td><td class="num">'+o.late_notified+'</td><td class="num">'+o.leave_notified+
+      '</td><td class="num">'+o.late_unnotified+'</td><td class="num">'+o.absent_unnotified+
+      '</td><td class="num"><span class="money'+(o.total?"":" zero")+'">$'+money(o.total)+
+      '</span><div class="meter"><i style="width:'+pct+'%"></i></div></td></tr>'}).join("")+
+    "</tbody></table>";
 }
 
 /* ---------- leave / late notices ---------- */
@@ -752,12 +1006,20 @@ async function loadDeliveries(){
   $("dvGrid").innerHTML='<div class="loading">กำลังโหลด…</div>';
   try{
     dvRows=await api("yokai_deliveries?select=*&delivery_date=gte."+dvDays[0]+"&delivery_date=lte."+dvDays[6]);
-    renderDeliveries();
+    renderDeliveries();animateIn($("p-deliver"));
   }catch(e){$("dvGrid").innerHTML='<div class="empty">โหลดไม่สำเร็จ: '+esc(e.message)+"</div>"}
 }
 const dvAt=function(m,d){return dvRows.find(function(x){return x.member_id===m&&x.delivery_date===d})};
 function renderDeliveries(){
-  const act=members.filter(function(m){return m.active}),today=bkkToday();
+  const allAct=members.filter(function(m){return m.active}),today=bkkToday();
+  const q=$("dvSearch").value,act=allAct.filter(function(m){return nameMatch(m.name,q)});
+  const done=dvRows.filter(function(r){return r.status==="done"});
+  $("dvChips").innerHTML='<div class="chip good"><b>'+done.length+"</b><span>ส่งแล้ว</span></div>"+
+    '<div class="chip bad"><b>'+(dvRows.length-done.length)+"</b><span>ค้างส่ง</span></div>"+
+    '<div class="chip"><b>$'+money(dvRows.reduce(function(s,r){return s+Number(r.amount||0)},0))+
+    "</b><span>มูลค่ารวม</span></div>";
+  countUp($("dvChips"),"dv");
+  if(!act.length){$("dvGrid").innerHTML='<div class="empty">'+(allAct.length?'ไม่พบชื่อ "'+esc(q.trim())+'"':"ยังไม่มีสมาชิก")+"</div>";setCount("dvCount",0,allAct.length);initScroll($("dvGrid"));return}
   let head='<tr><th class="nm">สมาชิก</th>';
   dvDays.forEach(function(d){head+='<th class="day'+(d===today?" today":"")+'">'+
     DAYTH[parseD(d).getDay()]+" "+d.slice(8,10)+"/"+d.slice(5,7)+"</th>"});
@@ -778,15 +1040,11 @@ function renderDeliveries(){
   }).join("");
   let foot='<tr><td class="nm">ส่งแล้ว</td>';
   dvDays.forEach(function(d){foot+="<td>"+dvRows.filter(function(x){
-    return x.delivery_date===d&&x.status==="done"}).length+"/"+act.length+"</td>"});
+    return x.delivery_date===d&&x.status==="done"}).length+"/"+allAct.length+"</td>"});
   foot+='<td class="fn"></td></tr>';
   $("dvGrid").innerHTML='<table class="grid"><thead>'+head+"</thead><tbody>"+body+"</tbody><tfoot>"+foot+"</tfoot></table>";
   $("dvGrid").querySelectorAll(".cell").forEach(function(b){b.onclick=function(){dvMenu(b)}});
-  const done=dvRows.filter(function(r){return r.status==="done"});
-  $("dvChips").innerHTML='<div class="chip good"><b>'+done.length+"</b><span>ส่งแล้ว</span></div>"+
-    '<div class="chip bad"><b>'+(dvRows.length-done.length)+"</b><span>ค้างส่ง</span></div>"+
-    '<div class="chip"><b>$'+money(dvRows.reduce(function(s,r){return s+Number(r.amount||0)},0))+
-    "</b><span>มูลค่ารวม</span></div>";
+  setCount("dvCount",act.length,allAct.length);initScroll($("dvGrid"));
 }
 function dvMenu(btn){
   const m=btn.dataset.m,d=btn.dataset.d;
@@ -937,12 +1195,346 @@ function csv(rows,name){
   a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1500);
 }
 
+
+/* =====================================================================
+   FX: sakura petals, embers, cursor aura
+   ===================================================================== */
+const REDUCED=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+(function fx(){
+  const cv=$("petals");if(!cv||REDUCED)return;
+  const ctx=cv.getContext("2d");if(!ctx)return;
+  const small=innerWidth<640;
+  const NP=small?16:30,NM=small?10:22;
+  let W=0,H=0,raf=0,last=0,mx=innerWidth/2,my=innerHeight/2,ax=mx,ay=my,moved=false;
+  const COLS=["232,66,60","232,66,60","180,20,28","242,165,160","201,162,75"];
+  function size(){const d=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0)}
+  function petal(init){return{x:Math.random()*W,y:init?Math.random()*H:-24-Math.random()*H*.25,r:6+Math.random()*9,vy:22+Math.random()*38,
+    sw:.5+Math.random()*1.3,ph:Math.random()*6.28,rot:Math.random()*6.28,vr:(Math.random()-.5)*1.6,tilt:Math.random()*6.28,
+    col:COLS[Math.floor(Math.random()*COLS.length)],a:.35+Math.random()*.45}}
+  function mote(init){return{x:Math.random()*W,y:init?Math.random()*H:H+10,r:.6+Math.random()*1.8,vy:-(6+Math.random()*16),
+    ph:Math.random()*6.28,a:.25+Math.random()*.5}}
+  let P=[],M=[];
+  function init(){size();P=Array.from({length:NP},function(){return petal(true)});M=Array.from({length:NM},function(){return mote(true)})}
+  function drawPetal(p){
+    const r=p.r;
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.scale(1,.5+.5*Math.abs(Math.cos(p.tilt)));
+    ctx.fillStyle="rgba("+p.col+","+p.a+")";
+    ctx.beginPath();ctx.moveTo(0,-r);ctx.bezierCurveTo(r*.95,-r*.55,r*.75,r*.75,0,r);ctx.bezierCurveTo(-r*.75,r*.75,-r*.95,-r*.55,0,-r);ctx.fill();
+    ctx.restore();
+  }
+  const aura=$("cursorAura");
+  addEventListener("pointermove",function(e){if(e.pointerType==="touch")return;mx=e.clientX;my=e.clientY;
+    if(!moved){moved=true;ax=mx;ay=my;aura.classList.add("on")}},{passive:true});
+  document.addEventListener("pointerleave",function(){aura.classList.remove("on");moved=false});
+  function frame(t){
+    const dt=Math.min(.05,(t-last)/1000||0);last=t;
+    ctx.clearRect(0,0,W,H);
+    P.forEach(function(p,i){
+      p.ph+=dt*p.sw;p.x+=Math.sin(p.ph)*p.sw*22*dt+8*dt;p.y+=p.vy*dt;p.rot+=p.vr*dt;p.tilt+=dt*1.6;
+      if(p.y>H+24||p.x>W+30){P[i]=petal(false);P[i].x=Math.random()*W}
+      drawPetal(p);
+    });
+    M.forEach(function(m,i){
+      m.ph+=dt*2;m.y+=m.vy*dt;m.x+=Math.sin(m.ph)*8*dt;
+      if(m.y<-10){M[i]=mote(false);return}
+      ctx.fillStyle="rgba(239,212,138,"+(m.a*(.55+.45*Math.sin(m.ph*1.7)))+")";
+      ctx.beginPath();ctx.arc(m.x,m.y,m.r,0,6.283);ctx.fill();
+    });
+    if(moved){ax+=(mx-ax)*.09;ay+=(my-ay)*.09;aura.style.transform="translate3d("+ax+"px,"+ay+"px,0)"}
+    raf=requestAnimationFrame(frame);
+  }
+  function start(){cancelAnimationFrame(raf);last=performance.now();raf=requestAnimationFrame(frame)}
+  document.addEventListener("visibilitychange",function(){if(document.hidden)cancelAnimationFrame(raf);else start()});
+  addEventListener("resize",size);
+  init();start();
+})();
+
+/* ---------- motion helpers ---------- */
+function moveInd(){
+  const ind=document.querySelector(".tab-ind"),on=document.querySelector(".tab.on");
+  if(!ind||!on)return;
+  ind.style.width=on.offsetWidth+"px";ind.style.transform="translateX("+on.offsetLeft+"px)";
+}
+addEventListener("resize",moveInd);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(moveInd);
+function animateIn(el){
+  if(!el||REDUCED)return;
+  el.classList.remove("enter");void el.offsetWidth;el.classList.add("enter");
+  clearTimeout(el._enterT);el._enterT=setTimeout(function(){el.classList.remove("enter")},1500);
+}
+const chipVals={};
+function countUp(root,key){
+  if(!root||REDUCED)return;
+  root.querySelectorAll(".chip b").forEach(function(el,i){
+    const m=el.textContent.match(/^(\$?)([\d,]+)$/);if(!m)return;
+    const to=+m[2].replace(/,/g,""),k=key+":"+i,from=chipVals[k]||0;chipVals[k]=to;
+    if(from===to)return;
+    const t0=performance.now(),dur=650;
+    (function step(t){
+      const p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);
+      el.textContent=m[1]+Math.round(from+(to-from)*e).toLocaleString("en-US");
+      if(p<1)requestAnimationFrame(step);
+    })(t0);
+  });
+}
+function popCell(m,d,r){
+  const b=document.querySelector('#ckGrid .cell[data-m="'+m+'"][data-d="'+d+'"][data-r="'+r+'"]');
+  if(b){b.classList.add("pop");setTimeout(function(){b.classList.remove("pop")},550)}
+}
+
+/* =====================================================================
+   Photo check: upload radio-list screenshot -> read names -> verify -> save
+   ===================================================================== */
+const TESS_URL="https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js";
+function loadTess(){
+  if(window.Tesseract)return Promise.resolve();
+  if(loadTess.p)return loadTess.p;
+  loadTess.p=new Promise(function(res,rej){
+    const s=document.createElement("script");s.src=TESS_URL;s.onload=res;
+    s.onerror=function(){loadTess.p=null;rej(new Error("โหลดตัวอ่านรูปไม่สำเร็จ — เช็คอินเทอร์เน็ตแล้วลองใหม่"))};
+    document.head.appendChild(s);
+  });
+  return loadTess.p;
+}
+
+/* ---- name matching (fuzzy) ---- */
+const normTxt=function(s){return String(s||"").toLowerCase().replace(/[^a-z0-9\u0E00-\u0E7F]/g,"")};
+function subDist(p,t){ // smallest edit distance between pattern p and ANY substring of t
+  const m=p.length,n=t.length;if(!m)return 0;
+  let prev=new Array(n+1).fill(0),cur=new Array(n+1);
+  for(let i=1;i<=m;i++){
+    cur[0]=i;
+    for(let j=1;j<=n;j++){
+      const c=p.charCodeAt(i-1)===t.charCodeAt(j-1)?0:1;
+      cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+c);
+    }
+    const tmp=prev;prev=cur;cur=tmp;
+  }
+  let best=m;for(let j=0;j<=n;j++)if(prev[j]<best)best=prev[j];
+  return best;
+}
+const UI_WORDS=["minimize","talker","radiolist","onlytalker","presstalker","hz"];
+function isUiLine(txt){const t=normTxt(txt);return t.length<4||UI_WORDS.some(function(w){return t.indexOf(w)>=0})||/^press/.test(t)}
+function scoreName(lineKey,member){
+  const full=normTxt(member.name),first=normTxt(String(member.name).trim().split(/\s+/)[0]);
+  let sFull=full.length?1-subDist(full,lineKey)/full.length:0;
+  let sFirst=0;
+  if(first.length>=4){const d=subDist(first,lineKey);if(d<=1)sFirst=(1-d/first.length)*.92}
+  else if(first.length>=2&&lineKey.indexOf(first)>=0)sFirst=.85;
+  return Math.max(sFull,sFirst);
+}
+function matchNames(lines,roster){
+  const items=[];
+  lines.forEach(function(text,li){
+    if(isUiLine(text))return;
+    const key=normTxt(text);
+    roster.forEach(function(m,mi){const s=scoreName(key,m);if(s>=.7)items.push({li:li,mi:mi,s:s})});
+  });
+  items.sort(function(a,b){return b.s-a.s});
+  const lineUsed={},memUsed={},assign={};
+  items.forEach(function(it){
+    if(lineUsed[it.li]||memUsed[it.mi])return;
+    lineUsed[it.li]=1;memUsed[it.mi]=1;
+    assign[roster[it.mi].id]={line:lines[it.li],score:it.s};
+  });
+  const unmatched=lines.filter(function(t,i){return !lineUsed[i]&&!isUiLine(t)});
+  return{assign:assign,unmatched:unmatched};
+}
+
+/* ---- image preprocess: upscale, grayscale, auto-invert, stretch contrast ---- */
+function preprocess(file){
+  return new Promise(function(res,rej){
+    const url=URL.createObjectURL(file),img=new Image();
+    img.onload=function(){
+      const scale=Math.max(2,Math.min(4,1600/img.width));
+      const c=document.createElement("canvas");c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);
+      const x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);
+      const id=x.getImageData(0,0,c.width,c.height),d=id.data,n=d.length/4,hist=new Uint32Array(256);let sum=0;
+      for(let i=0;i<d.length;i+=4){const g=Math.round(.299*d[i]+.587*d[i+1]+.114*d[i+2]);d[i]=g;hist[g]++;sum+=g}
+      const invert=sum/n<128;
+      if(invert){for(let v=0;v<128;v++){const t=hist[v];hist[v]=hist[255-v];hist[255-v]=t}}
+      let acc=0,lo=0,hi=255;
+      for(let v=0;v<256;v++){acc+=hist[v];if(acc>=n*.01){lo=v;break}}
+      acc=0;for(let v=255;v>=0;v--){acc+=hist[v];if(acc>=n*.01){hi=v;break}}
+      const span=Math.max(1,hi-lo);
+      for(let i=0;i<d.length;i+=4){
+        let g=d[i];if(invert)g=255-g;
+        g=Math.max(0,Math.min(255,(g-lo)*255/span));
+        d[i]=d[i+1]=d[i+2]=g;d[i+3]=255;
+      }
+      x.putImageData(id,0,0);
+      c.toBlob(function(b){b?res(b):rej(new Error("แปลงรูปไม่สำเร็จ"))},"image/png");
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);rej(new Error("เปิดไฟล์รูปนี้ไม่ได้"))};
+    img.src=url;
+  });
+}
+
+/* ---- modal ---- */
+let PH=null;
+function openModal(title,body,foot){
+  $("modal").innerHTML='<div class="modal-card"><div class="mhead"><h2>'+title+'</h2><button class="mx" id="mClose" aria-label="ปิด">✕</button></div>'+
+    '<div class="mbody">'+body+"</div>"+(foot?'<div class="mfoot">'+foot+"</div>":"")+"</div>";
+  $("modal").classList.add("on");document.body.classList.add("noscroll");
+  $("mClose").onclick=closeModal;
+}
+function closeModal(){
+  $("modal").classList.remove("on");$("modal").innerHTML="";document.body.classList.remove("noscroll");
+  if(PH&&PH.url)URL.revokeObjectURL(PH.url);
+  PH=null;
+}
+function bkkHour(){return Number(new Intl.DateTimeFormat("en-GB",{timeZone:"Asia/Bangkok",hour:"2-digit",hour12:false}).format(new Date()))}
+
+function photoStart(prev){
+  if(!isAdmin()){toast("เฉพาะหัวแก๊งค์ / รอง",true);return}
+  if(PH&&PH.url)URL.revokeObjectURL(PH.url);
+  PH={step:"pick",file:null,url:null,date:(prev&&prev.date)||bkkToday(),round:(prev&&prev.round)||(bkkHour()>=22?"23":"20")};
+  openModal("📷 อัปโหลดรูปรายชื่อ (วิทยุ)",
+    '<p class="sect-note" style="margin:0 0 12px">อัปโหลดรูปที่เห็นรายชื่อคนในวิทยุ ระบบจะอ่านชื่อแล้วให้คุณตรวจความถูกต้องก่อนบันทึกเป็น "มา"</p>'+
+    '<div class="grid2"><div class="field"><label for="phDate">วันที่</label><input type="date" id="phDate"></div>'+
+    '<div class="field"><label for="phRound">รอบ</label><select id="phRound"><option value="20">20:00</option><option value="23">23:00</option></select></div></div>'+
+    '<label class="drop" id="phDrop" for="phFile"><div><b>เลือกรูป หรือ ลากมาวางที่นี่</b>วางรูปจากคลิปบอร์ดได้เลย (Ctrl+V) · ใช้รูปที่เห็นชื่อชัดเจน</div></label>'+
+    '<input type="file" id="phFile" accept="image/*" hidden>',
+    '<button class="btn" id="phCancel">ยกเลิก</button><button class="btn primary" id="phGo" disabled>อ่านรายชื่อจากรูป</button>');
+  $("phDate").value=PH.date;$("phRound").value=PH.round;
+  $("phDate").onchange=function(){PH.date=$("phDate").value||bkkToday()};
+  $("phRound").onchange=function(){PH.round=$("phRound").value};
+  $("phCancel").onclick=closeModal;
+  $("phFile").onchange=function(){if(this.files&&this.files[0])photoSetFile(this.files[0])};
+  const dz=$("phDrop");
+  ["dragenter","dragover"].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add("over")})});
+  ["dragleave","drop"].forEach(function(ev){dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove("over")})});
+  dz.addEventListener("drop",function(e){const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)photoSetFile(f)});
+  $("phGo").onclick=photoRun;
+}
+function photoSetFile(f){
+  if(!PH||PH.step!=="pick")return;
+  if(!/^image\//.test(f.type)){toast("เลือกไฟล์รูปภาพเท่านั้น",true);return}
+  if(f.size>15*1024*1024){toast("รูปใหญ่เกิน 15 MB",true);return}
+  if(PH.url)URL.revokeObjectURL(PH.url);
+  PH.file=f;PH.url=URL.createObjectURL(f);
+  $("phDrop").innerHTML='<div><b>✓ ได้รูปแล้ว — กดอ่านรายชื่อได้เลย</b>คลิกเพื่อเปลี่ยนรูป<br><img src="'+PH.url+'" alt="ตัวอย่างรูป"></div>';
+  $("phGo").disabled=false;
+}
+document.addEventListener("paste",function(e){
+  if(!PH||PH.step!=="pick")return;
+  const items=(e.clipboardData&&e.clipboardData.items)||[];
+  for(let i=0;i<items.length;i++){
+    if(items[i].type&&items[i].type.indexOf("image/")===0){const f=items[i].getAsFile();if(f){photoSetFile(f);e.preventDefault();return}}
+  }
+});
+
+async function photoRun(){
+  if(!PH||!PH.file)return;
+  PH.step="run";
+  const date=PH.date,round=PH.round,file=PH.file,url=PH.url;
+  openModal("กำลังอ่านรายชื่อ…",
+    '<div class="scanwrap"><img src="'+url+'" alt=""></div><div class="prog"><i id="phBar"></i></div>'+
+    '<div id="phMsg" style="text-align:center;color:var(--ash);font-size:13.5px">กำลังเตรียมตัวอ่านรูป… (ครั้งแรกอาจใช้เวลา 10–30 วินาที)</div>');
+  const setP=function(p,msg){const b=$("phBar"),m=$("phMsg");if(b)b.style.width=Math.round(p)+"%";if(m&&msg)m.textContent=msg};
+  try{
+    setP(5);
+    const blob=await preprocess(file);setP(12);
+    await loadTess();setP(22,"กำลังโหลดตัวอ่านภาษา…");
+    const worker=await Tesseract.createWorker("eng",1,{logger:function(m){
+      if(m.status==="recognizing text")setP(40+m.progress*55,"กำลังอ่านรายชื่อ… "+Math.round(m.progress*100)+"%");
+      else if(/loading|initializ/.test(m.status||""))setP(22+Math.min(16,(m.progress||0)*16),"กำลังโหลดตัวอ่านภาษา…");
+    }});
+    await worker.setParameters({tessedit_pageseg_mode:"6",preserve_interword_spaces:"1"});
+    const out=await worker.recognize(blob);
+    await worker.terminate();
+    if(!PH)return; // user closed
+    const lines=out.data.text.split("\n").map(function(s){return s.trim()}).filter(Boolean);
+    const roster=members.filter(function(m){return m.active});
+    const r=matchNames(lines,roster);
+    let existing={};
+    try{
+      const ex=await api("yokai_attendance?select=member_id,status&check_date=eq."+date+"&round=eq."+round);
+      ex.forEach(function(x){existing[x.member_id]=x.status});
+    }catch(e){}
+    PH.step="verify";PH.lines=lines;PH.assign=r.assign;PH.unm=r.unmatched.map(function(t){return{text:t,mid:""}});
+    PH.existing=existing;PH.sel={};
+    Object.keys(r.assign).forEach(function(id){PH.sel[id]=true});
+    photoVerify();
+  }catch(e){
+    if(!PH)return;
+    PH.step="err";
+    openModal("อ่านรูปไม่สำเร็จ",'<div class="errbox">'+esc(e.message||e)+"</div>",
+      '<button class="btn" id="phCancel">ปิด</button><button class="btn primary" id="phRetry">ลองใหม่</button>');
+    $("phCancel").onclick=closeModal;
+    $("phRetry").onclick=function(){const p={date:date,round:round};photoStart(p)};
+  }
+}
+
+function photoVerify(){
+  const roster=members.filter(function(m){return m.active});
+  const ids=Object.keys(PH.sel).filter(function(k){return PH.sel[k]});
+  const found=roster.filter(function(m){return PH.assign[m.id]});
+  const rest=roster.filter(function(m){return !PH.assign[m.id]});
+  const rowHtml=function(m,i){
+    const a=PH.assign[m.id],ex=PH.existing[m.id];
+    const cls=a?(a.score<.9?"warn":"hit"):"";
+    const tag=a?(a.score<.9?'<span class="tag chk">ตรวจอีกครั้ง</span>':'<span class="tag ok">พบในรูป</span>'):'<span class="tag no">ไม่พบ</span>';
+    const extra=ex&&STATUS[ex]?'<span class="tag has" title="สถานะปัจจุบันของช่องนี้">ตอนนี้: '+STATUS[ex].g+"</span> ":"";
+    return '<label class="mrow '+cls+'" style="animation-delay:'+Math.min(i,14)*35+'ms"><input type="checkbox" data-id="'+m.id+'"'+(PH.sel[m.id]?" checked":"")+">"+
+      '<span class="avatar '+m.rank+'">'+initial(m.name)+'</span><div class="nm2"><b>'+esc(m.name)+"</b>"+
+      (a?"<small>อ่านได้: "+esc(a.line)+(a.score<1?" · ความมั่นใจ "+Math.round(a.score*100)+"%":" · เลือกเอง")+"</small>":"")+
+      "</div><span>"+extra+tag+"</span></label>";
+  };
+  const opts='<option value="">— ไม่ใช่รายชื่อ —</option>'+roster.map(function(m){return '<option value="'+m.id+'">'+esc(m.name)+"</option>"}).join("");
+  const unm=PH.unm.length?'<div class="unm"><h4>ข้อความที่อ่านได้แต่จับคู่ชื่อไม่ได้ — ถ้าเป็นชื่อสมาชิก เลือกชื่อที่ถูกต้อง</h4>'+
+    PH.unm.map(function(u,i){return '<div class="ur"><span title="'+esc(u.text)+'">'+esc(u.text)+'</span><select data-u="'+i+'">'+opts+"</select></div>"}).join("")+"</div>":"";
+  openModal("ตรวจความถูกต้อง — วันที่ "+thDate(PH.date)+" รอบ "+PH.round+":00",
+    '<div class="vgrid"><div class="vimg"><img src="'+PH.url+'" alt="รูปที่อัปโหลด" id="phImg"><small>กดที่รูปเพื่อขยาย · เทียบรายชื่อในรูปกับรายการทางขวา</small>'+unm+"</div>"+
+    '<div><div class="vsum"><b id="vCount">ติ๊กแล้ว '+ids.length+" จาก "+roster.length+" คน</b>"+
+    '<button class="btn sm" id="vAll">เลือกทั้งหมด</button><button class="btn sm" id="vNone">ล้าง</button></div>'+
+    '<div class="mlist">'+found.map(rowHtml).join("")+rest.map(function(m,i){return rowHtml(m,i+found.length)}).join("")+"</div></div></div>",
+    '<span class="note">คนที่ติ๊กจะถูกบันทึกเป็น "มา" ของวันที่ '+thDate(PH.date)+" รอบ "+PH.round+':00 · ถ้าช่องนั้นมีสถานะอยู่แล้วจะถูกเขียนทับ</span>'+
+    '<button class="btn" id="vRetake">เลือกรูปใหม่</button><button class="btn" id="vCancel">ยกเลิก</button>'+
+    '<button class="btn primary" id="vOk">✓ ถูกต้อง — บันทึก</button>');
+  $("vCancel").onclick=closeModal;
+  $("vRetake").onclick=function(){photoStart({date:PH.date,round:PH.round})};
+  $("phImg").onclick=function(){this.classList.toggle("zoom")};
+  const upd=function(){const n=Object.keys(PH.sel).filter(function(k){return PH.sel[k]}).length;$("vCount").textContent="ติ๊กแล้ว "+n+" จาก "+roster.length+" คน";$("vOk").disabled=!n};
+  document.querySelectorAll(".mrow input").forEach(function(c){c.onchange=function(){PH.sel[c.dataset.id]=c.checked;upd()}});
+  $("vAll").onclick=function(){roster.forEach(function(m){PH.sel[m.id]=true});photoVerify()};
+  $("vNone").onclick=function(){PH.sel={};photoVerify()};
+  document.querySelectorAll(".unm select").forEach(function(s){s.onchange=function(){
+    const u=PH.unm[+s.dataset.u],id=s.value;if(!id)return;
+    PH.assign[id]={line:u.text,score:1};PH.sel[id]=true;PH.unm.splice(+s.dataset.u,1);photoVerify();
+  }});
+  upd();
+}
+async function photoSave(){
+  if(!PH||PH.step!=="verify")return;
+  const ids=Object.keys(PH.sel).filter(function(k){return PH.sel[k]});
+  if(!ids.length){toast("ยังไม่ได้ติ๊กชื่อใคร",true);return}
+  const date=PH.date,round=PH.round,btn=$("vOk");btn.disabled=true;btn.textContent="กำลังบันทึก…";
+  try{
+    await api("yokai_attendance?on_conflict=check_date,member_id,round",{
+      method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
+      body:JSON.stringify(ids.map(function(id){return{check_date:date,member_id:id,round:round,status:"present",recorded_by:me.username}}))});
+    const names=ids.map(function(id){const m=members.find(function(x){return x.id===id});return m?m.name:id}).join(", ");
+    logAct("เช็คชื่อจากรูปวิทยุ",ids.length+" คน",thDate(date)+" รอบ "+round+":00 → มา: "+names);
+    closeModal();
+    $("ckAnchor").value=date;
+    if(ckView!=="week")setView("week");else loadCheck();
+    toast("บันทึกเป็น \"มา\" แล้ว "+ids.length+" คน");
+  }catch(e){toast(e.message,true);btn.disabled=false;btn.textContent="✓ ถูกต้อง — บันทึก"}
+}
+document.addEventListener("click",function(e){if(e.target&&e.target.id==="vOk")photoSave()});
+addEventListener("keydown",function(e){if(e.key==="Escape"&&PH&&PH.step!=="run")closeModal()});
+
 $("btnLogin").onclick=doLogin;
+$("btnPhoto").onclick=function(){photoStart()};
 $("u").addEventListener("keydown",function(e){if(e.key==="Enter")$("p").focus()});
 $("p").addEventListener("keydown",function(e){if(e.key==="Enter")doLogin()});
 $("btnLogout").onclick=logout;
 $("btnPass").onclick=changeMyPassword;
 document.querySelectorAll("#viewSeg button").forEach(function(b){b.onclick=function(){setView(b.dataset.v)}});
+$("ckSearch").oninput=function(){if(ckView==="week")renderCheck();else renderFines()};
+$("dvSearch").oninput=renderDeliveries;
 $("ckAnchor").onchange=loadCheck;
 $("ckRound").onchange=renderCheck;
 $("ckPrev").onclick=function(){$("ckAnchor").value=addDays($("ckAnchor").value,-7);loadCheck()};
